@@ -9,6 +9,6 @@ int main(int arg, char* argument[]) {
         CSV.MakeCSV(argument[arg - 1]);
     }
     else {
-        std::cout << "End" << endl;
+        std::cout << "Enter 2 arguments" << endl;
     }
 }
