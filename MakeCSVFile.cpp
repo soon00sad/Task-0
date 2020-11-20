@@ -5,40 +5,49 @@
 
 using namespace std;
 
-string DeletePunctuationMarks(string word) {
-	int size = word.length();
-	while (!isalpha(word[size - 1])) {
-		word.erase(size - 1, 1);
-		--size;
-	}
-	return word;
-}
-
-void MakeCSVFile::FindWordsFromFile(string inputFile) {
+void MakeCSVFile::FindWordsFromFile(const string &inputFile) {
 	ifstream inFile(inputFile);
-	if (!inFile.is_open()) {
-		cout << "File isn't open" << endl;
+	try {
+		if (!inFile.is_open()) {
+			throw std::invalid_argument("File isn't open");
+		}
+	}
+	catch(const std::invalid_argument& line) {
+		std::cerr << "File isn't open" << line.what() << endl;
 	}
 	while (!inFile.eof()) {
-		string word;
-		getline(inFile, word, ' ');
-		word = DeletePunctuationMarks(word);
-		++words_m[word];
-		word.clear();
-		++amountOfWords;
+		string word, symbol;
+		getline(inFile, symbol);
+		for (int i = 0; i < symbol.length(); ++i) {
+			if (isalnum(symbol[i]) && symbol[i] != '\0') {
+				word += symbol[i];
+			}
+			else {
+				if (word.length() > 0) {
+					++words_m[word];
+					word.clear();
+					++amountOfWords;
+				}
+			}
+		}
 	}
 	inFile.close();
 }
 
-void MakeCSVFile::MakeCSV(string outputFile) {
+void MakeCSVFile::MakeCSV(const string &outputFile) {
 	ofstream outFile(outputFile);
 	multimap <int, string, greater<int>> CSVFile;
 	for (auto it = words_m.begin(); it != words_m.end(); ++it) {
 		CSVFile.insert(pair<int, string>(it->second, it->first));
 	}
 	words_m.clear();
-	if (!outFile.is_open()) {
-		cout << "File isn't open" << endl;
+	try {
+		if (!outFile.is_open()) {
+			throw std::invalid_argument("File isn't open");
+		}
+	}
+	catch(const std::invalid_argument& line) {
+		std::cerr << "File isn't open" << line.what() << endl;
 	}
 	for (auto it = CSVFile.begin(); it != CSVFile.end(); ++it) {
 		outFile << it->second << ", " << it->first << ", " << (int)((double)it->first / (double)amountOfWords * 100) << "%\n" << endl;
