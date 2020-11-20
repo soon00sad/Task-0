@@ -7,13 +7,8 @@ using namespace std;
 
 void MakeCSVFile::FindWordsFromFile(const string &inputFile) {
 	ifstream inFile(inputFile);
-	try {
-		if (!inFile.is_open()) {
-			throw std::invalid_argument("File isn't open");
-		}
-	}
-	catch(const std::invalid_argument& line) {
-		std::cerr << "File isn't open" << line.what() << endl;
+	if (!inFile.is_open()) {
+		throw std::invalid_argument("File isn't open");
 	}
 	while (!inFile.eof()) {
 		string word, symbol;
@@ -41,13 +36,8 @@ void MakeCSVFile::MakeCSV(const string &outputFile) {
 		CSVFile.insert(pair<int, string>(it->second, it->first));
 	}
 	words_m.clear();
-	try {
-		if (!outFile.is_open()) {
-			throw std::invalid_argument("File isn't open");
-		}
-	}
-	catch(const std::invalid_argument& line) {
-		std::cerr << "File isn't open" << line.what() << endl;
+	if (!outFile.is_open()) {
+		throw std::invalid_argument("File isn't open");
 	}
 	for (auto it = CSVFile.begin(); it != CSVFile.end(); ++it) {
 		outFile << it->second << ", " << it->first << ", " << (int)((double)it->first / (double)amountOfWords * 100) << "%\n" << endl;
