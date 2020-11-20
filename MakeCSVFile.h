@@ -8,6 +8,6 @@ class MakeCSVFile {
 	map <string, int> words_m;
 	int amountOfWords = 0;
 public:
-	void FindWordsFromFile(string inFile);
-	void MakeCSV(string outFile);
+	void FindWordsFromFile(const string &inFile);
+	void MakeCSV(const string &outFile);
 };
